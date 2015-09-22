@@ -27,8 +27,15 @@ tv list "The Simpsons"
 tv watch "The Simpsons" 1 1
 ```
 
+### Contributing
 
-##
+So getting involved is really simple.  Here are the steps:
+* Install [click](https://github.com/mitsuhiko/click) using pip
+* Install virtualenv using pip
+* Clone from the **master** branch
+* Create a virtual enviornment within your local repository and activate it
+* run ```pip install --editable```
+
 ### FAQ
 
 Q: Something isn't working properly and I want it fixed:
