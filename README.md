@@ -46,6 +46,8 @@ Q: Is there a mobile version of this?
 
 ##### A: I took a few hours to port it to Telegram, so yes -- there is.
 
+![mobile demo](http://i.imgur.com/10pm7FC.gif)
+
 Q: How do I get rid of the ads?
 
 ##### A: Honestly, who doesn't have ad-block these days? I'm working on it
