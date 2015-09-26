@@ -83,30 +83,44 @@ def cli(config, verbose):
     Termivision, or "tv", is a dead simple CLI that allows you to watch almost any of your favorite tv shows for free without the bother of searching for them online. You can watch, discover, and schedule(wip) your tv shows"""
     config.verbose = verbose
 @cli.command()
-@click.option('--here', default=False,is_flag=True,help='download via terminal')
-@click.argument('name',default='',metavar='[series]')
-@click.argument('season',default='',metavar='[season]')
-@click.argument('episode',default='',metavar='[episode]')
+@click.option('--here', default=False, is_flag=True, help='download via terminal')
+@click.argument('name', default='', metavar='[series]')
+@click.argument('season', default='', metavar='[season]')
+@click.argument('episode', default='', metavar='[episode]')
 @config
 def download(config,name,season,episode,here):
     """ download any television show"""
     if name and season and episode:
-        print os.path.dirname(os.path.realpath(__file__)) + '\\television.db' 
+        
+        if(config.verbose):
+          click.echo(os.path.dirname(os.path.realpath(__file__)) + '\\television.db' )
+        
+        # attempt to establish a connection to local database
         conn = sqlite3.connect(os.path.dirname(os.path.realpath(__file__)) + '\\television.db')
         cursor = conn.cursor()
+        
+        # generate sql queries in string format
         se = "%%Season %s Episode %s%%" % (season,episode)
-        sn = name 
+        sn = name
+
+        # execute sql query statement and grab first result
         cursor.execute("SELECT episode_link_direct,name,episode_name FROM show WHERE episode_name LIKE ? AND name LIKE ?", (se,sn))
         r = cursor.fetchone()
+        
         if(config.verbose):
             click.echo("Attempting to download: %s %s" % (r[1],r[2]))
+        
         response = urllib2.urlopen(urllib2.Request(r[0].strip('[]').replace("'",""))).read()
-        download_link =  re.findall("\"file\" .*$",response,re.MULTILINE) #really stupid allmuyvideo vulnerability 
+        
+        # search HTML data for CDN link 
+        download_link =  re.findall("\"file\" .*$",response,re.MULTILINE) # really stupid allmuyvideo vulnerability 
         download_link = download_link[0]
+        
+        # if user doesn't want to download straight to desktop
         if not here:
             webbrowser.open_new_tab(download_link.split(":",1)[1].replace('"','').strip(",\"\" "))
         else:
-            print os.getcwd() + "\\"+ r[2].replace(u'\u2013','-').replace(u"\u2019", "'") + ".mp4"
+            click.echo(os.getcwd() + "\\"+ r[2].replace(u'\u2013','-').replace(u"\u2019", "'") + ".mp4")
             urllib.urlretrieve(download_link.split(":",1)[1].replace('"','').strip(",\"\" "), os.getcwd() + "\\"+ r[2] + ".mp4",download_update)
     else:
         click.secho("Invalid Input. Try using tv download --help",bg='red',fg='white')
@@ -148,9 +162,13 @@ def watch(config,name,season,episode):
 @config
 def list(config,name,season):
     """ explore any television show"""
+
     if config.verbose:
         click.echo("Now listing %s Season %s" % (name,season))
+    
+    #connect to local databse    
     conn = sqlite3.connect(os.path.dirname(os.path.realpath(__file__)) + '\\television.db')
+    
     series_name = "\"" + name + "\""
     season_name = season.replace("",'%% %%')
     click.echo()
