@@ -94,7 +94,7 @@ def download(config, name, season, episode, here):
     if name and season and episode:
         
         if(config.verbose):
-          click.echo(os.path.dirname(os.path.realpath(''__file__'')) + '\\television.db' )
+          click.echo(os.path.dirname(os.path.realpath('__file__')) + '\\television.db' )
         
         # attempt to establish a connection to local database
         conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) 
@@ -295,3 +295,7 @@ def info(config,series):
 #Callback Functions
 def download_update(count, blockSize, totalSize):
     click.echo("Now downloading... " + str(count*blockSize*100/totalSize) + "%")
+
+
+if __name__ == "__main__":
+  cli()
