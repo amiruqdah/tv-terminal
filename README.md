@@ -12,7 +12,7 @@
 Termivision, or "tv", is a dead simple CLI that allows you to watch
 almost any of your favorite tv shows for free without the bother of
 searching for them online. You can watch, discover, and schedule(probably not)
-your tv shows.
+your tv shows. 
 
 Here it is in action:
 
@@ -26,6 +26,8 @@ tv info "The Simpsons"
 tv list "The Simpsons"
 tv watch "The Simpsons" 1 1
 ```
+
+If this intrigues you, hop over to the super cool [website](http://amiruqdah.github.io/tv-terminal/).
 
 ### Contributing
 
