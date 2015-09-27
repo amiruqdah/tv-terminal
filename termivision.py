@@ -94,10 +94,10 @@ def download(config, name, season, episode, here):
     if name and season and episode:
         
         if(config.verbose):
-          click.echo(os.path.dirname(os.path.realpath(__file__)) + '\\television.db' )
+          click.echo(os.path.dirname(os.path.realpath(''__file__'')) + '\\television.db' )
         
         # attempt to establish a connection to local database
-        conn = sqlite3.connect(os.path.dirname(os.path.realpath(__file__)) 
+        conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) 
           + '\\television.db')
         # create a cursor to navigate SQL db
         cursor = conn.cursor()
@@ -138,7 +138,7 @@ def download(config, name, season, episode, here):
 @config
 def random(config):
     '''watch any random tv show and episode'''
-    conn = sqlite3.connect(os.path.dirname(os.path.realpath(__file__)) + '\\television.db')
+    conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) + '\\television.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM show ORDER BY RANDOM() LIMIT 1")
     r = cursor.fetchone()
@@ -154,7 +154,7 @@ def random(config):
 def watch(config,name,season,episode):
     """ watch any television show"""
     if name and season and episode:
-        conn = sqlite3.connect(os.path.dirname(os.path.realpath(__file__)) + '\\television.db')
+        conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) + '\\television.db')
         cursor = conn.cursor()
         se = "%%Season %s Episode %s%%" % (season,episode)
         sn = name
@@ -177,7 +177,7 @@ def list(config,name,season):
         click.echo("Now listing %s Season %s" % (name,season))
     
     #connect to local databse    
-    conn = sqlite3.connect(os.path.dirname(os.path.realpath(__file__)) + '\\television.db')
+    conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) + '\\television.db')
     
     series_name = "\"" + name + "\""
     season_name = season.replace("",'%% %%')
@@ -242,7 +242,7 @@ def update(series):
         def parse_episodes(self,response):
             from lxml import html
             import requests
-            conn = sqlite3.connect(os.path.dirname(os.path.realpath(__file__)) + '\\television.db')
+            conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) + '\\television.db')
             cursor = conn.cursor()
             click.secho("\nGrabbing Episodes..",bg='green',fg='white')
             print str(response.meta['root_link']).strip('[]')
