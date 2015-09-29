@@ -278,20 +278,25 @@ def update(series):
 def info(config,series):
     """get a brief summary on any tv series"""
     import requests #lazy load because this is the only time we use the library
+    
     payload = {'q': series}
-    r = requests.get("http://api.tvmaze.com/singlesearch/shows",params=payload)
+    r = requests.get("http://api.tvmaze.com/singlesearch/shows", params=payload)
     jo = r.json()
+    
     NUM_RE = re.compile(r'/(\d+)/')
+    
     click.echo("Rating: %s" % NUM_RE.sub('',str(jo['rating']).encode('utf-8','ignore')))
     click.echo("Language: %s" % jo['language'])
     click.echo("Runtime: %s" % jo['runtime'])
     click.echo("Status: %s" % jo['status'])
     click.echo("Genre(s):")
+
     for genre in jo['genres']:
         click.echo("     o %s" % genre)
 
     TAG_RE = re.compile(r'<[^>]+>')
-    click.echo(TAG_RE.sub('',"Summary: " + jo['summary']))
+    click.echo(TAG_RE.sub('',"Summary: " + jo['summary'] ))
+
 #Callback Functions
 def download_update(count, blockSize, totalSize):
     click.echo("Now downloading... " + str(count*blockSize*100/totalSize) + "%")
