@@ -157,18 +157,18 @@ def watch(config,name,season,episode):
         conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) + '\\television.db')
         cursor = conn.cursor()
         se = "%%Season %s Episode %s%%" % (season,episode)
-        sn = name
+        sn = name + " "
         cursor.execute("SELECT episode_link_direct,name,episode_name FROM show WHERE episode_name LIKE ? AND name LIKE ?", (se,sn))
         r = cursor.fetchone()
         click.echo(r[0])
         if(config.verbose):
-            click.echo("Now watching: %s %s" % (r[1],r[2]), bg='green',fg='white')
+            click.secho("Now watching: %s %s" % (r[1],r[2]), bg='green',fg='white')
         webbrowser.open_new_tab(r[0].strip('[]').replace("'",""))
     else:
         click.secho("Invalid Input. Try using tv watch --help",bg='red',fg='white')
 @cli.command()
-@click.argument('name',metavar='[series]',required=True)
-@click.argument('season',default='%',required=False,metavar="[season]")
+@click.argument('name', metavar='[series]', required=True)
+@click.argument('season', default='%', required=False, metavar="[season]")
 @config
 def list(config,name,season):
     """ explore any television show"""
@@ -179,7 +179,7 @@ def list(config,name,season):
     #connect to local databse    
     conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) + '\\television.db')
     
-    series_name = "\"" + name + "\""
+    series_name = "\"" + name + " \""
     season_name = season.replace("",'%% %%')
     click.echo()
     cursor = conn.cursor()
