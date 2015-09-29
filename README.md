@@ -39,6 +39,9 @@ So getting involved is really simple.  Here are the steps:
 * run ```pip install --editable```
 
 ### FAQ
+Q: Why did you make this?
+
+#####  A: It started off as a 3 day educational challenge to build a web crawler and eventually, I decided to make a CLI and store the results allowing for easy accsess. It's pretty nifty. 
 
 Q: Something isn't working properly and I want it fixed:
 
