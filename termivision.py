@@ -157,7 +157,7 @@ def watch(config,name,season,episode):
         conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) + '\\television.db')
         cursor = conn.cursor()
         se = "%%Season %s Episode %s%%" % (season,episode)
-        sn = name + " "
+        sn = name
         cursor.execute("SELECT episode_link_direct,name,episode_name FROM show WHERE episode_name LIKE ? AND name LIKE ?", (se,sn))
         r = cursor.fetchone()
         click.echo(r[0])
@@ -179,7 +179,7 @@ def list(config,name,season):
     #connect to local databse    
     conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) + '\\television.db')
     
-    series_name = "\"" + name + " \""
+    series_name = "\"" + name + "\""
     season_name = season.replace("",'%% %%')
     click.echo()
     cursor = conn.cursor()
