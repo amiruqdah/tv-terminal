@@ -156,14 +156,18 @@ def watch(config,name,season,episode):
     if name and season and episode:
         conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) + '\\television.db')
         cursor = conn.cursor()
+        
         se = "%%Season %s Episode %s%%" % (season,episode)
         sn = name
+        
         cursor.execute("SELECT episode_link_direct,name,episode_name FROM show WHERE episode_name LIKE ? AND name LIKE ?", (se,sn))
         r = cursor.fetchone()
         click.echo(r[0])
+
         if(config.verbose):
             click.secho("Now watching: %s %s" % (r[1],r[2]), bg='green',fg='white')
         webbrowser.open_new_tab(r[0].strip('[]').replace("'",""))
+    
     else:
         click.secho("Invalid Input. Try using tv watch --help",bg='red',fg='white')
 @cli.command()
