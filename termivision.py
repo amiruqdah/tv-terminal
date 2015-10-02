@@ -269,8 +269,10 @@ def update(series):
         def parse_episodes(self,response):
             from lxml import html
             import requests
+            #attempt to establish a connection to the local sqlite database for writing purposes
             conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) + '\\television.db')
             cursor = conn.cursor()
+            # let the user know were getting ready to start grabbing the episodes from the series they previously confirmed
             click.secho("\nGrabbing Episodes..",bg='green',fg='white')
             print str(response.meta['root_link']).strip('[]')
             episodes=response.xpath('//div[contains(@class,"entry")]//ul/li')
@@ -334,6 +336,9 @@ def info(config,series):
 def download_update(count, blockSize, totalSize):
     # let the user know how their download is going, by flushing progress to a console
     click.echo("Now downloading... " + str(count*blockSize*100/totalSize) + "%")
+def remove_ads(html_response):
+  #TODO: add logic to remove add stuff from the HTML response file
+  pass
 
 
 if __name__ == "__main__":
