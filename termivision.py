@@ -229,10 +229,12 @@ def update(series):
     class SeriesUpdater(scrapy.Spider):
         name = "updater"
         series = None     
+        # set the root url of the repository to begin scraping
         start_urls=["http://stream-tv2.co/"]
         def __init__(self, *args, **kwargs):
             super(SeriesUpdater,self).__init__(*args,**kwargs)
             series = kwargs.get('series')
+        # define parent function for scraper
         def parse(self, response):
             sel = Selector(response)
             shows = response.xpath('//ul/li')
@@ -240,12 +242,16 @@ def update(series):
             for show in shows:
                 name = [s.encode('utf-8') for s in show.xpath('a/text()').extract()]
                 link = show.xpath('a/@href').extract()
-                names[str(name).decode('utf-8').strip('[]')]=link
-            # search for series name
+                # use key-value store in order to extract links from series
+                names[str(name).decode('utf-8').strip('[]')] = link
+            # brute force key-value search for items in name
             for key, value in names.iteritems():
                 if series in key.strip():
                   click.secho("\nFound %s" % str(key).strip('[]').encode('utf-8'),bg='green',fg='white')
                   click.echo('Shall we continue? [yn]', nl=False)
+                  # make sure that the user recognizes that this is what they want to add to the database
+                  # TODO: Make sure that I remove all entries from the DB that match this series so that users can update easily
+                  # TODO: Also make sure that it determines what needs to be updated and what doesn't
                   c = click.getchar()
                   click.echo()
                   if c == 'y':
