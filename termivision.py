@@ -181,32 +181,43 @@ def watch(config,name,season,episode):
 @config
 def list(config,name,season):
     """ explore any television show"""
-
-    if config.verbose:
-        click.echo("Now listing %s Season %s" % (name,season))
+    # display what series is being attempted to being listed
+    click.echo("Now listing %s Season %s" % (name, season))
     
     #connect to local databse    
     conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) + '\\television.db')
     
+    # generate sql queries
     series_name = "\"" + name + "\""
     season_name = season.replace("",'%% %%')
-    click.echo()
+
+    # generate a new-line
+    click.echo() 
+
+    # create an object to run queries off of 
     cursor = conn.cursor()
+
+    # enumerate through the search query results
     for i,row in enumerate(cursor.execute("SELECT episode_name FROM show WHERE name LIKE %s AND episode_name LIKE \'%%Season %s %%\'" % (series_name,season))):
         click.echo(row[0].replace(u'\u2013','-').replace(u"\u2019", "'"))
+        # every twenty entries in the listing, ask if the user wants to continue or not
         if i % 20 == 0 and i != 0:
             click.echo('Continue listing? [yn]', nl=False)
+            # determine if the user wants to continue listing
             c = click.getchar()
             click.echo()
             if c == 'y':
                 click.secho("\nContinued",bg='green',fg='white')
+                # continue listing
                 continue
             elif c == 'n':
                 click.secho("\nTerminated",bg='red',fg='white')
+                # stop listing
                 break
             else:
                 click.secho("\nInvalid Input!",bg='red',fg='white')
-                break
+                # handle invalid input and continue to list
+                continue
 @cli.command()
 @click.argument('series',required='true')
 def update(series):
