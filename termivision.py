@@ -153,22 +153,27 @@ def random(config):
 @config
 def watch(config,name,season,episode):
     """ watch any television show"""
+    # check to see if name, season, and episode have been defined
     if name and season and episode:
+        # establish a connection to the local sqlite database
         conn = sqlite3.connect(os.path.dirname(os.path.realpath('__file__')) + '\\television.db')
         cursor = conn.cursor()
-        
+        # generate sql query statements
         se = "%%Season %s Episode %s%%" % (season,episode)
         sn = name
-        
+        # execute sql query statement against databse
         cursor.execute("SELECT episode_link_direct,name,episode_name FROM show WHERE episode_name LIKE ? AND name LIKE ?", (se,sn))
+        # grab first result
         r = cursor.fetchone()
         click.echo(r[0])
-
-        if(config.verbose):
-            click.secho("Now watching: %s %s" % (r[1],r[2]), bg='green',fg='white')
+        
+        # display what the user is watching
+        click.secho("Now watching: %s %s" % (r[1],r[2]), bg='green',fg='white')
+        # launch in web browser
         webbrowser.open_new_tab(r[0].strip('[]').replace("'",""))
-    
+
     else:
+        # let the user know that they have not defined parameters correctly
         click.secho("Invalid Input. Try using tv watch --help",bg='red',fg='white')
 @cli.command()
 @click.argument('name', metavar='[series]', required=True)
