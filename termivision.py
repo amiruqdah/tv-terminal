@@ -225,6 +225,7 @@ def update(series):
     import scrapy
     from scrapy.selector import Selector
     from scrapy.crawler import CrawlerProcess
+    # crawler logic
     class SeriesUpdater(scrapy.Spider):
         name = "updater"
         series = None     
@@ -299,26 +300,33 @@ def info(config,series):
     """get a brief summary on any tv series"""
     import requests #lazy load because this is the only time we use the library
     
+    # generate a payload query parameter set with series as the main parameter
     payload = {'q': series}
+    # generate a request for json data(tv info) regarding that series
     r = requests.get("http://api.tvmaze.com/singlesearch/shows", params=payload)
+    # store seralized json object for request into variable
     jo = r.json()
     
+    # define a regex that parses for a numerical value only
     NUM_RE = re.compile(r'/(\d+)/')
     
+    # echo and format info from the json response
     click.echo("Rating: %s" % NUM_RE.sub('',str(jo['rating']).encode('utf-8','ignore')))
     click.echo("Language: %s" % jo['language'])
     click.echo("Runtime: %s" % jo['runtime'])
     click.echo("Status: %s" % jo['status'])
     click.echo("Genre(s):")
-
+    # format and list all the genres the series falls under
     for genre in jo['genres']:
-        click.echo("     o %s" % genre)
+        click.echo("     o %s" % genre) # tab and bullet list ascii representation
 
+    # part of the json is actually HTMl data so we remove the HTML tags and just get the content within the tag
     TAG_RE = re.compile(r'<[^>]+>')
     click.echo(TAG_RE.sub('',"Summary: " + jo['summary'] ))
 
 #Callback Functions
 def download_update(count, blockSize, totalSize):
+    # let the user know how their download is going, by flushing progress to a console
     click.echo("Now downloading... " + str(count*blockSize*100/totalSize) + "%")
 
 
