@@ -49,7 +49,7 @@ Q: Something isn't working properly and I want it fixed:
 
 Q: Is there a mobile version of this?
 
-##### A: I took a few hours to port it to Telegram, so yes -- there is.
+##### A: I took a few hours to port it to Telegram, so yes -- [there is](http://telegram.me/TellyBot).
 
 ![mobile demo](http://i.imgur.com/10pm7FC.gif)
 
